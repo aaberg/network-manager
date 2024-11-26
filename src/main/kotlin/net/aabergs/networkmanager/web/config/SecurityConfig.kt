@@ -49,7 +49,20 @@ class SecurityConfig {
                 authorize("/admin/**", hasRole("ADMIN"))
                 authorize("/app/**", hasRole("USER"))
                 authorize("/auth/**", permitAll)
+                authorize("/", permitAll)
+
+                // static resources
+                authorize("/webjars/**", permitAll)
+                authorize("/css/**", permitAll)
+                authorize("/images/**", permitAll)
+                authorize("/js/**", permitAll)
+
+                // the rest
                 authorize(anyRequest, denyAll)
+            }
+            formLogin {
+                loginPage = "/auth/login"
+                permitAll()
             }
         }
 

@@ -1,0 +1,33 @@
+@import "main.css";
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url("/images/loginbg2.webp");
+    background-size: cover;
+}
+
+#login-box {
+    background: var(--background-form-color);
+    width: 400px;
+    border-radius: var(--default-border-radius);
+    padding: 1rem;
+    box-shadow: 0 0 20px 20px rgba(0, 0, 0, 0.5);
+    margin:1rem;
+}
+
+#login-box h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+#forgot-password {
+    text-align: right;
+    font-size: 0.8rem;
+}
+
+button {
+    margin-bottom: 3rem;
+}

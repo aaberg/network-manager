@@ -1,0 +1,12 @@
+@import "main.css";
+
+
+#dashboard-container h1 {
+    font-size: 3rem;
+    text-align: center;
+    padding: 3rem 0;
+}
+
+#contacts-container {
+    padding-top: 1rem;
+}

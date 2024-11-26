@@ -1,0 +1,10 @@
+:root {
+    --primary-text-color: rgb(206, 208, 214);
+    --background-color: rgb(30, 31, 34);
+    --background-form-color: rgb(43, 45, 48);
+    --primary-color: rgb(53, 116, 240);
+    --error-color: rgb(178, 62, 59);
+
+    --default-border-radius: 10px;
+    --input-border-radius: 6px;
+}
