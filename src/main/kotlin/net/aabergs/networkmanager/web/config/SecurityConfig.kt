@@ -48,6 +48,7 @@ class SecurityConfig {
             authorizeHttpRequests {
                 authorize("/admin/**", hasRole("ADMIN"))
                 authorize("/app/**", hasRole("USER"))
+                authorize("/account/**", permitAll)
                 authorize("/auth/**", permitAll)
                 authorize("/", permitAll)
 
@@ -63,6 +64,7 @@ class SecurityConfig {
             formLogin {
                 loginPage = "/auth/login"
                 permitAll()
+                defaultSuccessUrl("/auth/postlogin", true)
             }
         }
 

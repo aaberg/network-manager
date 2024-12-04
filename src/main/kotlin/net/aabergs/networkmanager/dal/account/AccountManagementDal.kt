@@ -6,16 +6,20 @@ import net.aabergs.networkmanager.dal.schema.UserTenantTable
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertReturning
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.springframework.stereotype.Component
 
+@Component
 class AccountManagementDal {
 
-    fun registerNewUser(name: String): UserDto {
+    fun registerNewUser(userId: String, name: String, email: String): UserDto {
 
-        val user = UserDto(name)
+        val user = UserDto(userId, name, email)
         transaction {
 
             UserTable.insertReturning {
                 it[UserTable.name] = name
+                it[UserTable.userId] = userId
+                it[UserTable.email] = email
             }.single().let {
                 user.id = it[UserTable.id].value
                 user.created = it[UserTable.created]
@@ -24,7 +28,7 @@ class AccountManagementDal {
             var tenant: TenantDto
             TenantTable.insertReturning {
                 it[TenantTable.name] = name
-                it[TenantTable.type] = "Private"
+                it[TenantTable.type] = "Personal"
             }.single().let {
                 tenant = TenantDto(
                     it[TenantTable.name],
@@ -57,7 +61,7 @@ class AccountManagementDal {
     fun getUserById(id: Long): UserDto? {
 
         return transaction {
-            val userRow = UserTable.select(UserTable.id, UserTable.name, UserTable.created)
+            val userRow = UserTable.select(UserTable.id, UserTable.userId, UserTable.email, UserTable.name, UserTable.created)
                 .where { UserTable.id eq id }
                 .singleOrNull()
 
@@ -65,7 +69,7 @@ class AccountManagementDal {
 
             val user: UserDto
             userRow.let {
-                user = UserDto(it[UserTable.name])
+                user = UserDto(it[UserTable.userId], it[UserTable.name], it[UserTable.email])
                 user.id = it[UserTable.id].value
                 user.created = it[UserTable.created]
             }
@@ -90,5 +94,15 @@ class AccountManagementDal {
 
             return@transaction user
         }
+    }
+
+    fun getUserByUserId(userId: String) : UserDto? {
+        val id = transaction {
+            UserTable.select(UserTable.id)
+                .where { UserTable.userId eq userId }
+                .singleOrNull()?.get(UserTable.id)
+        } ?: return null
+
+        return getUserById(id.value)
     }
 }

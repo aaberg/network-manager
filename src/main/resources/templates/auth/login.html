@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}">
+<head th:replace="fragments/main.html :: head(title='Login | Network Builder')">
+    <title></title>
 </head>
 <body>
 
-<div class="container">
-    <div id="login-box" >
+<div class="account-container">
+    <div id="account-box" >
         <h1>Login</h1>
         <form th:action="@{/auth/login}" method="post">
             <div>

@@ -28,18 +28,20 @@ class AccountManagementDalTest(@Autowired database: Database) {
         val dal = AccountManagementDal()
 
         // Act
-        val user = dal.registerNewUser("test")
+        val user = dal.registerNewUser("sometestid","test", "test@mail.com")
 
         val refetchedUser = dal.getUserById(user.id!!)
 
         // Assert
         assert(user.id != null)
+        assert(user.userId == "sometestid")
         assert(user.created != null)
         assert(user.tenants.size == 1)
         assert(user.tenants[0].id != null)
 
         assert(refetchedUser != null)
         assert(refetchedUser!!.id == user.id)
+        assert(refetchedUser.userId == user.userId)
         assert(refetchedUser.name == user.name)
         assert(refetchedUser.created == user.created)
         assert(refetchedUser.tenants.size == 1)

@@ -8,10 +8,10 @@
 <h1>Fragments</h1>
 
 <div class="menu" th:fragment="menu">
-    <a class="menu-item active">Dashboard</a>
-    <a class="menu-item">All contacts</a>
-    <a class="menu-item">All companies</a>
-    <a class="menu-item">Settings</a>
+    <div><a class="menu-item active" th:href="@{/app/dashboard}">Dashboard</a></div>
+    <div><a class="menu-item" th:href="@{/app/contacts}">All contacts</a></div>
+    <div><a class="menu-item">All companies</a></div>
+    <div><a class="menu-item">Settings</a></div>
 </div>
 
 </body>

@@ -11,7 +11,9 @@ object TenantTable : LongIdTable("tenant") {
 }
 
 object UserTable : LongIdTable("user") {
+    val userId = varchar("user_id", 255).uniqueIndex()
     val name = varchar("name", 255)
+    val email = varchar("email", 255)
     val created = timestamp("created").default(Clock.System.now())
 }
 

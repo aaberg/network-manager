@@ -1,6 +1,9 @@
 @import "main.css";
 
+/* Main container */
 
+
+/* Dashboard */
 #dashboard-container h1 {
     font-size: 3rem;
     text-align: center;
@@ -8,5 +11,10 @@
 }
 
 #contacts-container {
+    padding-top: 1rem;
+}
+
+/* New Contact */
+#new-contact-container {
     padding-top: 1rem;
 }

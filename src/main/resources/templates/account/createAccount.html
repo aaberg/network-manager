@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/main.html} :: head(title='Create account | Network Builder')">
+    <title></title>
+</head>
+<body>
+<div class="account-container">
+  <div id="account-box">
+    <h1>Register user</h1>
+    <h2>Almost there!</h2>
+    <p>Please register the information asked for below, and you are ready to start networking</p>
+    <form th:action="@{/account/register}" method="post">
+
+      <div>
+        <label>
+          Full name
+          <input type="text" name="name" placeholder="Full name" />
+        </label>
+        <label>
+          Email
+          <input type="text" name="email" placeholder="Email" />
+        </label>
+      </div>
+
+      <div>
+        <button class="primary" type="submit">Register</button>
+        <a href="https://github.com">I'm don't want to register. Get me out of here</a>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+</body>
+</html>

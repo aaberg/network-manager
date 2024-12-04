@@ -1,5 +1,6 @@
 @import url(defaultfont.css);
 @import url(theme.css);
+@import url(login.css);
 
 html {
     box-sizing: border-box;
@@ -33,11 +34,18 @@ a {
     text-decoration: underline;
     color: var(--primary-text-color);
 }
+a.icon-link {
+    text-decoration: none;
+}
+
+form.defaultForm {
+    padding: 1rem;
+}
 
 /* Input styles */
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], input[type="email"], input[type="tel"] {
     width: 100%;
-    padding: 0.5rem;
+    padding: 1rem;
     margin: 0.5rem 0;
     border: 1px solid var(--primary-text-color);
     border-radius: var(--input-border-radius);
@@ -127,3 +135,19 @@ button {
     margin: 0 1rem;
     view-transition-name: menu-bar-transition;
 }
+
+/** Form Control **/
+div.form-control {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+.form-control button {
+    background-color: var(--background-color);
+    font-size: 15pt;
+    padding: 1rem;
+}
+

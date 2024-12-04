@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:replace="fragments/main.html :: head(title='Contact list | Network Builder')">
+<head th:replace="~{fragments/main.html :: head(title='Contact list | Network Builder')}">
     <title></title>
 </head>
 <body>
-<div>
-    <div th:replace="fragments/main.html :: menu-overlay"></div>
-    <div th:replace="fragments/main.html :: menu ( activeMenu='contacts')"></div>
+<div class="main-container">
+    <div th:replace="~{fragments/main.html :: menu-overlay}"></div>
+    <div th:replace="~{fragments/main.html :: menu ( activeMenu='contacts')}"></div>
     <div id="contacts-container">
 
-        <div th:replace="fragments/main.html :: menu-bar(text='Contact list')"></div>
+        <div th:replace="~{fragments/main.html :: menu-bar(text='Contact list')}"></div>
     </div>
 </div>
 </body>

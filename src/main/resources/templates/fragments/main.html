@@ -33,15 +33,22 @@
     <h2 th:text="${text}"></h2>
 
     <div>
-        <svg id="plusButton" width="4em" height="2rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg-btn">
-            <rect x="10" y="4" width="4" height="16" fill="currentColor"/>
-            <rect x="4" y="10" width="16" height="4" fill="currentColor"/>
-        </svg>
+        <th:block th:unless="${hideCreate}">
+            <a th:href="@{/app/contacts/new}" th:hx-get="@{/app/contacts/new}" hx-push-url="true" hx-target="body"
+               hx-swap="outerHtml transition:true" class="icon-link">
+                <svg id="plusButton" width="4em" height="2rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg-btn">
+                    <rect x="10" y="4" width="4" height="16" fill="currentColor"/>
+                    <rect x="4" y="10" width="16" height="4" fill="currentColor"/>
+                </svg>
+            </a>
+        </th:block>
 
-        <svg id="searchButton" width="4em" height="2rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg-btn">
-            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
-            <line x1="16" y1="16" x2="22" y2="22" stroke="currentColor" stroke-width="2"/>
-        </svg>
+        <th:block th:unless="${hideSearch}">
+            <svg id="searchButton" width="4em" height="2rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg-btn">
+                <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                <line x1="16" y1="16" x2="22" y2="22" stroke="currentColor" stroke-width="2"/>
+            </svg>
+        </th:block>
     </div>
 </div>
 

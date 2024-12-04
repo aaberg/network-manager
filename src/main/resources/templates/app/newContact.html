@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/main.html :: head(title='Dashboard | New Contact')}">
+    <title></title>
+</head>
+<body>
+<div class="main-container">
+    <div th:replace="~{fragments/main.html :: menu-overlay}"></div>
+    <div th:replace="~{fragments/main.html :: menu ( activeMenu='New Contact')}"></div>
+    <div id="new-contact-container">
+        <div th:replace="~{fragments/main.html :: menu-bar(text='New Contact', hideSearch=true, hideCreate=true)}"></div>
+
+        <form id="new-contact-form" class="defaultForm" th:action="@{/app/contacts/new}" method="post">
+            <label>
+                Name
+                <input type="text" id="name" name="name" required />
+            </label>
+
+            <label>
+                Email
+                <input type="email" id="mail" name="email"/>
+            </label>
+
+            <label>
+                Phone
+                <input type="tel" id="phone" name="phone"/>
+            </label>
+
+            <div class="form-control">
+                <button type="button">Cancel</button>
+                <button type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
