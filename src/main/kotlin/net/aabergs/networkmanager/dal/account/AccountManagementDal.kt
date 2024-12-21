@@ -1,5 +1,6 @@
 package net.aabergs.networkmanager.dal.account
 
+import net.aabergs.networkmanager.bl.TenantType
 import net.aabergs.networkmanager.dal.schema.TenantTable
 import net.aabergs.networkmanager.dal.schema.UserTable
 import net.aabergs.networkmanager.dal.schema.UserTenantTable
@@ -12,48 +13,23 @@ import org.springframework.stereotype.Component
 class AccountManagementDal {
 
     fun registerNewUser(userId: String, name: String, email: String): UserDto {
+        return transaction {
+            val user = createUserInternal(name, userId, email)
 
-        val user = UserDto(userId, name, email)
-        transaction {
-
-            UserTable.insertReturning {
-                it[UserTable.name] = name
-                it[UserTable.userId] = userId
-                it[UserTable.email] = email
-            }.single().let {
-                user.id = it[UserTable.id].value
-                user.created = it[UserTable.created]
-            }
-
-            var tenant: TenantDto
-            TenantTable.insertReturning {
-                it[TenantTable.name] = name
-                it[TenantTable.type] = "Personal"
-            }.single().let {
-                tenant = TenantDto(
-                    it[TenantTable.name],
-                    it[TenantTable.type]
-                )
-                tenant.id = it[TenantTable.id].value
-            }
-
-            UserTenantTable.insert {
-                it[UserTenantTable.user] = user.id!!
-                it[UserTenantTable.tenant] = tenant.id!!
-            }
+            val tenant = createTenantInternal(name, TenantType.PERSONAL)
+            createUserTenantReferenceInternal(user.id, tenant.id)
 
             user.tenants = listOf(tenant)
-
+            return@transaction user
         }
-        return user;
     }
 
     fun assignUserToTenant(user: UserDto, tenant: TenantDto) {
 
         transaction {
             UserTenantTable.insert {
-                it[UserTenantTable.user] = user.id!!
-                it[UserTenantTable.tenant] = tenant.id!!
+                it[user_id] = user.id
+                it[tenant_tenant] = tenant.id
             }
         }
     }
@@ -67,30 +43,20 @@ class AccountManagementDal {
 
             userRow ?: return@transaction null
 
-            val user: UserDto
-            userRow.let {
-                user = UserDto(it[UserTable.userId], it[UserTable.name], it[UserTable.email])
-                user.id = it[UserTable.id].value
-                user.created = it[UserTable.created]
+            val user = userRow.let {
+                UserDto(it[UserTable.id].value, it[UserTable.userId], it[UserTable.name], it[UserTable.email], it[UserTable.created])
             }
 
-            val tenants = mutableListOf<TenantDto>()
-
-            UserTenantTable.select(UserTenantTable.tenant)
-                .where { UserTenantTable.user eq id }
-                .forEach {
-                    TenantTable.select(TenantTable.id, TenantTable.name, TenantTable.type)
-                        .where { TenantTable.id eq it[UserTenantTable.tenant] }
-                        .singleOrNull()?.let {
-                            val tenant = TenantDto(
-                                it[TenantTable.name],
-                                it[TenantTable.type],
-                            )
-                            tenant.id = it[TenantTable.id].value
-                            tenants += tenant
-                        }
+            user.tenants = (TenantTable innerJoin UserTenantTable)
+                .select(TenantTable.id, TenantTable.name, TenantTable.type)
+                .where { UserTenantTable.user_id eq id }
+                .map {
+                    TenantDto(
+                        it[TenantTable.id].value,
+                        it[TenantTable.name],
+                        it[TenantTable.type]
+                    )
                 }
-            user.tenants = tenants
 
             return@transaction user
         }
@@ -104,5 +70,41 @@ class AccountManagementDal {
         } ?: return null
 
         return getUserById(id.value)
+    }
+
+    fun createTenant(name: String, type: TenantType) : TenantDto {
+        return transaction {
+            createTenantInternal(name, type)
+        }
+    }
+
+    private fun createTenantInternal(name: String, type: TenantType) : TenantDto {
+        return TenantTable.insertReturning {
+            it[TenantTable.name] = name
+            it[TenantTable.type] = type.toString()
+        }.single().let {
+            TenantDto(
+                it[TenantTable.id].value,
+                it[TenantTable.name],
+                it[TenantTable.type]
+            )
+        }
+    }
+
+    private fun createUserInternal(name: String, userId: String, email: String) : UserDto {
+        UserTable.insertReturning {
+            it[UserTable.name] = name
+            it[UserTable.userId] = userId
+            it[UserTable.email] = email
+        }.single().let {
+            return UserDto(it[UserTable.id].value, userId, name, email, it[UserTable.created])
+        }
+    }
+
+    private fun createUserTenantReferenceInternal(userId: Long, tenantId: Long) {
+        UserTenantTable.insert {
+            it[user_id] = userId
+            it[tenant_tenant] = tenantId
+        }
     }
 }

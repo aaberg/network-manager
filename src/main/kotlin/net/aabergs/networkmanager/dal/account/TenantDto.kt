@@ -1,5 +1,4 @@
 package net.aabergs.networkmanager.dal.account
 
-data class TenantDto(val name: String, val type: String) {
-    var id: Long? = null
+data class TenantDto(val id: Long, val name: String, val type: String) {
 }

@@ -26,11 +26,8 @@ class AccountManagerTest {
     fun `when getAccount called with valid principal then account is returned`() {
         // Arrange
         val principal = Principal { "test_user_id" }
-        val userDto = UserDto("test_user_id", "test", "test@email.com").apply {
-            id = 1
-            created = Clock.System.now()
-            tenants = listOf(TenantDto("test", "Personal").apply {
-                id = 1 })
+        val userDto = UserDto(1,"test_user_id", "test", "test@email.com", Clock.System.now()).apply {
+            tenants = listOf(TenantDto(1,"test", "Personal"))
         }
 
         every { accountManagementDal.getUserByUserId("test_user_id") } returns userDto

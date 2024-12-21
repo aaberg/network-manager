@@ -18,9 +18,15 @@ object UserTable : LongIdTable("user") {
 }
 
 object UserTenantTable : Table("user_tenant") {
-    val user = reference("user", UserTable)
-    val tenant = reference("tenant", TenantTable)
+    val user_id = reference("user", UserTable)
+    val tenant_tenant = reference("tenant", TenantTable)
 
-    override val primaryKey = PrimaryKey(user, tenant, name = "PK_UserTenant_User_Tenant")
+    override val primaryKey = PrimaryKey(user_id, tenant_tenant, name = "PK_UserTenant_User_Tenant")
+}
+
+object ContactTable : LongIdTable("contact") {
+    val tenantId = reference("tenant_id", TenantTable)
+    val name = varchar("name", 255)
+    val created = timestamp("created").default(Clock.System.now())
 }
 

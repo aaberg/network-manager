@@ -16,7 +16,7 @@ class AccountWeb(private val accountManager: AccountManager) {
     @GetMapping("/register")
     fun createAccountPage(model: Model, principal: Principal) : String {
         model.addAttribute("user_id", principal.name)
-        return "account/createAccount"
+        return "/account/createAccount"
     }
 
     @PostMapping("/register")
