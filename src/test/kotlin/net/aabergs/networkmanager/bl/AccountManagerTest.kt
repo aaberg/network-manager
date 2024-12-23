@@ -27,7 +27,7 @@ class AccountManagerTest {
         // Arrange
         val principal = Principal { "test_user_id" }
         val userDto = UserDto(1,"test_user_id", "test", "test@email.com", Clock.System.now()).apply {
-            tenants = listOf(TenantDto(1,"test", "Personal"))
+            tenants = listOf(TenantDto(1,"test", "PERSONAL"))
         }
 
         every { accountManagementDal.getUserByUserId("test_user_id") } returns userDto

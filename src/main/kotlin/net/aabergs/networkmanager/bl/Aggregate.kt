@@ -8,7 +8,7 @@ abstract class Aggregate(var version: Long = -1) {
         protected set
 
     private val uncommittedEvents = mutableListOf<Event>()
-    fun getUncommittedEvents() = uncommittedEvents.asIterable()
+    fun getUncommittedEvents() = uncommittedEvents.toList()
     fun clearUncommittedEvents() = uncommittedEvents.clear()
 
     fun loadFromHistory(events: List<Event>) {

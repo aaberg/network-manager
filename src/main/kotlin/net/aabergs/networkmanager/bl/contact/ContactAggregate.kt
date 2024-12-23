@@ -1,12 +1,8 @@
 package net.aabergs.networkmanager.bl.contact
 
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import net.aabergs.networkmanager.bl.Aggregate
-import net.aabergs.networkmanager.bl.Event
-import net.aabergs.networkmanager.bl.NewContactCreated
+import net.aabergs.networkmanager.bl.*
 import java.util.*
-import kotlin.reflect.typeOf
 
 class ContactAggregate() : Aggregate() {
     constructor(id: UUID, name: String, created: Instant, tenantId: Long) : this() {
@@ -19,14 +15,46 @@ class ContactAggregate() : Aggregate() {
     var created = Instant.DISTANT_PAST
 
     var tenantId = 0L
+        private set
 
     private var _emails = mutableListOf<Email>()
-    var emails = _emails.asIterable()
-        private set
+    val emails: List<Email>
+        get() = _emails
 
     private var _phoneNumbers = mutableListOf<PhoneNumber>()
-    var phoneNumbers = _phoneNumbers.asIterable()
-        private set
+    val phoneNumbers: List<PhoneNumber>
+        get() = _phoneNumbers
+
+    private var _primaryEmail: Email? = null
+    var primaryEmail:Email?
+        get() = _primaryEmail
+        set(value) {
+            if (value != null && !_emails.contains(value))
+                throw InvalidStateException("Email must be added to contact before it can be set as primary")
+
+            apply(PrimaryEmailSet(value))
+        }
+
+    private var _primaryPhoneNumber: PhoneNumber? = null
+    var primaryPhoneNumber:PhoneNumber?
+        get() = _primaryPhoneNumber
+        set(value) {
+            if (value != null && !_phoneNumbers.contains(value))
+                throw InvalidStateException("Phone number must be added to contact before it can be set as primary")
+
+            apply(PrimaryPhoneNumberSet(value))
+        }
+
+    fun rename(newName: String) = apply(Renamed(newName))
+    fun addEmail(email: Email) = apply(EmailAdded(email))
+    fun addPhoneNumber(phoneNumber: PhoneNumber) = apply(PhoneNumberAdded(phoneNumber))
+    fun removeEmail(email: Email) {
+        if (!_emails.contains(email))
+            throw InvalidStateException("Email not found in contact")
+        apply(EmailRemoved(email))
+    }
+    fun removePhoneNumber(phoneNumber: PhoneNumber) = apply(PhoneNumberRemoved(phoneNumber))
+
 
     override fun update(event: Event) {
         when (event) {
@@ -36,10 +64,30 @@ class ContactAggregate() : Aggregate() {
                 created = event.created
                 tenantId = event.tenantId
             }
+            is EmailAdded -> _emails.add(event.email)
+            is EmailRemoved -> {
+                _emails.remove(event.email)
+                if (_primaryEmail == event.email)
+                    _primaryEmail = null
+            }
+            is PrimaryEmailSet -> _primaryEmail = event.email
+            is PhoneNumberAdded -> _phoneNumbers.add(event.phoneNumber)
+            is PhoneNumberRemoved -> {
+                _phoneNumbers.remove(event.phoneNumber)
+                if (_primaryPhoneNumber == event.phoneNumber)
+                    _primaryPhoneNumber = null
+            }
+            is PrimaryPhoneNumberSet -> _primaryPhoneNumber = event.phoneNumber
+            is Renamed -> name = event.newName
         }
     }
 
     override fun ensureValidState() {
-        TODO("Not yet implemented")
+        if (id == DEFAULT_ID) {
+            throw InvalidStateException("Contact ID must be set")
+        }
+        if (name == "") {
+            throw InvalidStateException("Contact name is empty")
+        }
     }
 }

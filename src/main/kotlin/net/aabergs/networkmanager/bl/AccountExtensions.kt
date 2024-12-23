@@ -3,7 +3,7 @@ package net.aabergs.networkmanager.bl
 import net.aabergs.networkmanager.dal.account.UserDto
 
 fun UserDto.toAccount() : Account {
-    val account = Account(this.name, this.email, this.id!!, this.created!!)
+    val account = Account(this.name, this.email, this.id, this.created)
 
     account.let {
         it.tenants = this.tenants.map { tenantDto ->
