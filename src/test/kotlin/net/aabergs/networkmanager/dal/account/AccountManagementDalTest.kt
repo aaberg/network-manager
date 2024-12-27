@@ -1,12 +1,7 @@
 package net.aabergs.networkmanager.dal.account
 
-import net.aabergs.networkmanager.dal.schema.ContactTable
-import net.aabergs.networkmanager.dal.schema.TenantTable
-import net.aabergs.networkmanager.dal.schema.UserTable
-import net.aabergs.networkmanager.dal.schema.UserTenantTable
+import net.aabergs.networkmanager.dal.dropAndCreateSchema
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.Test
@@ -21,10 +16,7 @@ class AccountManagementDalTest(@Autowired val database: Database) {
 
     @BeforeAll
     fun setUp() {
-        transaction(database) {
-            SchemaUtils.drop(UserTable, TenantTable, UserTenantTable, ContactTable)
-            SchemaUtils.create(UserTable, TenantTable, UserTenantTable, ContactTable)
-        }
+        dropAndCreateSchema(database)
     }
 
     @Test

@@ -45,7 +45,7 @@ class ContactAggregate() : Aggregate() {
             apply(PrimaryPhoneNumberSet(value))
         }
 
-    fun rename(newName: String) = apply(Renamed(newName))
+    fun rename(newName: String) = apply(ContactRenamed(newName))
     fun addEmail(email: Email) = apply(EmailAdded(email))
     fun addPhoneNumber(phoneNumber: PhoneNumber) = apply(PhoneNumberAdded(phoneNumber))
     fun removeEmail(email: Email) {
@@ -78,7 +78,7 @@ class ContactAggregate() : Aggregate() {
                     _primaryPhoneNumber = null
             }
             is PrimaryPhoneNumberSet -> _primaryPhoneNumber = event.phoneNumber
-            is Renamed -> name = event.newName
+            is ContactRenamed -> name = event.newName
         }
     }
 

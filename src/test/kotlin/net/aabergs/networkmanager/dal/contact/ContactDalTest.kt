@@ -2,13 +2,8 @@ package net.aabergs.networkmanager.dal.contact
 
 import net.aabergs.networkmanager.bl.TenantType
 import net.aabergs.networkmanager.dal.account.AccountManagementDal
-import net.aabergs.networkmanager.dal.schema.ContactTable
-import net.aabergs.networkmanager.dal.schema.TenantTable
-import net.aabergs.networkmanager.dal.schema.UserTable
-import net.aabergs.networkmanager.dal.schema.UserTenantTable
+import net.aabergs.networkmanager.dal.dropAndCreateSchema
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -19,10 +14,7 @@ import org.springframework.test.context.TestPropertySource
 class ContactDalTest(@Autowired database: Database) {
 
     init {
-        transaction(database) {
-            SchemaUtils.drop(UserTable, TenantTable, UserTenantTable, ContactTable)
-            SchemaUtils.create(UserTable, TenantTable, UserTenantTable, ContactTable)
-        }
+        dropAndCreateSchema(database)
     }
 
     @Test

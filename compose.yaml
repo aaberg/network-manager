@@ -3,7 +3,7 @@ services:
     image: postgres:latest
     environment:
       POSTGRES_DB: networkmanager
-      POSTGRES_USER: postgres
+      POSTGRES_USER: networkmanager
       POSTGRES_PASSWORD: thepassword
     ports:
       - "5432:5432"

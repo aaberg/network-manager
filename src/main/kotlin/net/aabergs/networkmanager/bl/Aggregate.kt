@@ -2,7 +2,7 @@ package net.aabergs.networkmanager.bl
 
 import java.util.UUID
 
-abstract class Aggregate(var version: Long = -1) {
+abstract class Aggregate(var version: Int = -1) {
 
     var id: UUID = DEFAULT_ID
         protected set

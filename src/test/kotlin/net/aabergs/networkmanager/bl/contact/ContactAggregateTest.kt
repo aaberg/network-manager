@@ -28,7 +28,7 @@ class ContactAggregateTest {
         // Assert
         assert(contactAggregate.getUncommittedEvents().size == 8)
         assert(contactAggregate.getUncommittedEvents()[0] == NewContactCreated(id, "Kari Normann", createdTime, 1))
-        assert(contactAggregate.getUncommittedEvents()[1] == Renamed("Kari Normannsen"))
+        assert(contactAggregate.getUncommittedEvents()[1] == ContactRenamed("Kari Normannsen"))
         assert(contactAggregate.getUncommittedEvents()[2] == EmailAdded(Email("kari@normannsen.com")))
         assert(contactAggregate.getUncommittedEvents()[3] == PhoneNumberAdded(PhoneNumber("12345678")))
         assert(contactAggregate.getUncommittedEvents()[4] == PrimaryEmailSet(Email("kari@normannsen.com")))

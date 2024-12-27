@@ -1,9 +1,10 @@
 package net.aabergs.networkmanager.dal.schema
 
 import kotlinx.datetime.Clock
+import kotlinx.serialization.json.Json
 import net.aabergs.networkmanager.bl.Event
-import net.aabergs.networkmanager.bl.serializeEvent
 import org.jetbrains.exposed.dao.id.LongIdTable
+import org.jetbrains.exposed.sql.Schema
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.json.jsonb
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
@@ -34,10 +35,22 @@ object ContactTable : LongIdTable("contact") {
     val created = timestamp("created").default(Clock.System.now())
 }
 
-object EventsTable : LongIdTable("events") {
+object EventsTable : Table("events") {
     val aggregateId = uuid("aggregate_id")
+    val version = integer("version")
     val aggregateType = text("aggregate_type")
-    val eventType = text("event_type")
-    //val event = jsonb("event", serializeEvent, )
+    val eventData = jsonb<Event>("event_data", Json.Default)
+
+    override val primaryKey = PrimaryKey(aggregateId, version, name = "PK_Events")
+}
+
+// Projections
+val projectionsSchema = Schema("projections")
+
+object ContactListProjectionTable : LongIdTable("projections.contact_list") {
+    val tenantId = long("tenant_id")
+    val contactAggregateId = uuid("contact_aggregate_id")
+
+    val name = text("name")
 }
 
