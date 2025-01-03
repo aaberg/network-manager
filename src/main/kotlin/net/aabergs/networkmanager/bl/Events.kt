@@ -18,6 +18,7 @@ sealed interface Event{}
 @Serializable data class PhoneNumberAdded(val phoneNumber: PhoneNumber) : Event
 @Serializable data class PhoneNumberRemoved(val phoneNumber: PhoneNumber) : Event
 @Serializable data class PrimaryPhoneNumberSet(val phoneNumber: PhoneNumber?) : Event
+@Serializable class ContactDeleted : Event
 
 //object UUIDSerializer : KSerializer<UUID> {
 //    override val descriptor = PrimitiveSerialDescriptor("UUID", PrimitiveKind.STRING)

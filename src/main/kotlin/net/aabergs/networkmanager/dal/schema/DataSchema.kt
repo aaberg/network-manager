@@ -28,13 +28,6 @@ object UserTenantTable : Table("user_tenant") {
     override val primaryKey = PrimaryKey(user_id, tenant_tenant, name = "PK_UserTenant_User_Tenant")
 }
 
-// Remember to remove
-object ContactTable : LongIdTable("contact") {
-    val tenantId = reference("tenant_id", TenantTable)
-    val name = varchar("name", 255)
-    val created = timestamp("created").default(Clock.System.now())
-}
-
 object EventsTable : Table("events") {
     val aggregateId = uuid("aggregate_id")
     val version = integer("version")

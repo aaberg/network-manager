@@ -45,6 +45,9 @@ class ContactAggregate() : Aggregate() {
             apply(PrimaryPhoneNumberSet(value))
         }
 
+    var isDeleted = false
+        private set
+
     fun rename(newName: String) = apply(ContactRenamed(newName))
     fun addEmail(email: Email) = apply(EmailAdded(email))
     fun addPhoneNumber(phoneNumber: PhoneNumber) = apply(PhoneNumberAdded(phoneNumber))
@@ -54,7 +57,7 @@ class ContactAggregate() : Aggregate() {
         apply(EmailRemoved(email))
     }
     fun removePhoneNumber(phoneNumber: PhoneNumber) = apply(PhoneNumberRemoved(phoneNumber))
-
+    fun delete() = apply(ContactDeleted())
 
     override fun update(event: Event) {
         when (event) {
@@ -79,6 +82,7 @@ class ContactAggregate() : Aggregate() {
             }
             is PrimaryPhoneNumberSet -> _primaryPhoneNumber = event.phoneNumber
             is ContactRenamed -> name = event.newName
+            is ContactDeleted -> isDeleted = true
         }
     }
 
