@@ -3,6 +3,7 @@ package net.aabergs.networkmanager.bl
 import net.aabergs.networkmanager.bl.contact.ContactAggregate
 import net.aabergs.networkmanager.dal.aggregate.AggregateDal
 import net.aabergs.networkmanager.dal.aggregate.AggregateEventDto
+import net.aabergs.networkmanager.dal.contact.ContactProjectionsDal
 import net.aabergs.networkmanager.dal.projections.Projection
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Component
@@ -35,4 +36,8 @@ class AggregateManager(val aggregateDal: AggregateDal, val projections: List<Pro
             else -> throw IllegalArgumentException("Unknown aggregate type: $aggregateType")
         }
     }
+
+
+    // Functions for fetching projections
+    fun getContactList(tenantId: Long) = ContactProjectionsDal().getContactList(tenantId)
 }

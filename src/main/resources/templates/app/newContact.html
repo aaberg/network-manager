@@ -12,23 +12,13 @@
 
         <form id="new-contact-form" class="defaultForm" th:action="@{/app/contacts/new}" method="post">
             <label>
-                Name
-                <input type="text" id="name" name="name" required />
-            </label>
-
-            <label>
-                Email
-                <input type="email" id="mail" name="email"/>
-            </label>
-
-            <label>
-                Phone
-                <input type="tel" id="phone" name="phone"/>
+                What is the name of the contact?
+                <input type="text" id="name" name="name" placeholder="name" required />
             </label>
 
             <div class="form-control">
                 <button type="button">Cancel</button>
-                <button type="submit">Save</button>
+                <button type="submit">Create Contact</button>
             </div>
         </form>
     </div>

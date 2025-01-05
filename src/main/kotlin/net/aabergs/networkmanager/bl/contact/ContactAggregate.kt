@@ -2,6 +2,7 @@ package net.aabergs.networkmanager.bl.contact
 
 import kotlinx.datetime.Instant
 import net.aabergs.networkmanager.bl.*
+import net.aabergs.networkmanager.bl.InvalidStateException
 import java.util.*
 
 class ContactAggregate() : Aggregate() {

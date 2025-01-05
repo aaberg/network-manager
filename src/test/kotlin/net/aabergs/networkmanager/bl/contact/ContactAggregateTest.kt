@@ -2,6 +2,7 @@ package net.aabergs.networkmanager.bl.contact
 
 import kotlinx.datetime.Clock
 import net.aabergs.networkmanager.bl.*
+import net.aabergs.networkmanager.bl.InvalidStateException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.util.*

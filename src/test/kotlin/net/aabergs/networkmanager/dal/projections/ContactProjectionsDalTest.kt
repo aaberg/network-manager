@@ -29,9 +29,6 @@ class ContactProjectionsDalTest {
     @Autowired
     private lateinit var aggregateManager: AggregateManager
 
-    @Autowired
-    private lateinit var contactProjectionsDal: ContactProjectionsDal
-
     @BeforeAll
     fun setUp() {
         dropAndCreateSchema(database)
@@ -46,10 +43,9 @@ class ContactProjectionsDalTest {
 
         // Act
         aggregateManager.saveState(contactAggregate)
-        val contacts = contactProjectionsDal.getContactList(1)
+        val contacts = aggregateManager.getContactList(1)
 
         // Assert
-
         assertThat(contacts)
             .extracting("tenantId", "name")
             .containsOnly(tuple(1L, "Test Test"))
@@ -60,7 +56,7 @@ class ContactProjectionsDalTest {
 
         // Act
         aggregateManager.saveState(contactAggregate)
-        val updatedContacts = contactProjectionsDal.getContactList(1)
+        val updatedContacts = aggregateManager.getContactList(1)
 
         // Assert
         assertThat(updatedContacts)
@@ -77,7 +73,7 @@ class ContactProjectionsDalTest {
         // Act
         contactAggregate.delete()
         aggregateManager.saveState(contactAggregate)
-        val contacts = contactProjectionsDal.getContactList(1)
+        val contacts = aggregateManager.getContactList(1)
 
         // Assert
         assertThat(contacts).isEmpty()
