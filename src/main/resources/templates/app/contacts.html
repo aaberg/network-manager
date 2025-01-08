@@ -3,10 +3,10 @@
 <head th:replace="~{fragments/main.html :: head(title='Contact list | Network Builder')}">
     <title></title>
 </head>
-<body>
+<body hx-boost="true">
 <div class="main-container">
     <div th:replace="~{fragments/main.html :: menu-overlay}"></div>
-    <div th:replace="~{fragments/main.html :: menu ( activeMenu='contacts')}"></div>
+    <div th:replace="~{fragments/main.html :: menu (tenant=${tenant.id}, activeMenu='contacts')}"></div>
     <div id="contacts-container">
 
         <div th:replace="~{fragments/main.html :: menu-bar(text='Contact list')}"></div>

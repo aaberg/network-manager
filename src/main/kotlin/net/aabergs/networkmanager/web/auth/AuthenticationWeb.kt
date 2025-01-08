@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.view.RedirectView
 import java.security.Principal
-
 @Controller
 @RequestMapping("/auth")
 class AuthenticationWeb(
@@ -20,11 +19,12 @@ class AuthenticationWeb(
         return "auth/login"
     }
 
-    @GetMapping("/postlogin")
-    fun postLogin(principal: Principal) : RedirectView {
-        val account = accountManager.getAccount(principal) ?: return RedirectView("/account/register")
-        val tenant = account.tenants.first()
-
-        return RedirectView("/app/dashboard/${tenant.id}")
-    }
+//    @GetMapping("/postlogin")
+//    fun postLogin(principal: Principal) : RedirectView {
+//        val account = accountManager.getAccount(principal) ?: return RedirectView("/account/register")
+//        val tenant = account.tenants.first()
+//
+//        return RedirectView("/app/dashboard/${tenant.id}")
+//    }
 }
+

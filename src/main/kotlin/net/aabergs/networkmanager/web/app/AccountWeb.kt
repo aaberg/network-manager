@@ -26,6 +26,6 @@ class AccountWeb(private val accountManager: AccountManager) {
         val account = accountManager.registerAccount(principal, name, email)
         val tenant = account.tenants.first()
 
-        return RedirectView("/app/dashboard/${tenant.id}")
+        return RedirectView("/app/${tenant.id}/dashboard")
     }
 }

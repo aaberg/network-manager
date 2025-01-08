@@ -14,27 +14,27 @@ import java.security.Principal
 import java.util.*
 
 @Controller
-@RequestMapping("/app")
+@RequestMapping("/app/{tenantId}")
 class AppWeb(
     private val accountManager: AccountManager,
     private val aggregateManager: AggregateManager
 ) {
 
-    @GetMapping("/dashboard/{tenantId}")
+    @GetMapping("/dashboard")
     fun dashboard(model: Model, principal: Principal, @PathVariable("tenantId") tenantId: Long) : String {
         model.addAttribute("account", accountManager.getAccount(principal))
         model.addAttribute("tenant", accountManager.validateAccessAndGetTenant(principal, tenantId))
         return "app/dashboard"
     }
 
-    @GetMapping("/contacts/{tenantId}")
+    @GetMapping("/contacts")
     fun contacts(model: Model, principal: Principal, @PathVariable("tenantId") tenantId: Long) : String {
         model.addAttribute("account", accountManager.getAccount(principal))
         model.addAttribute("tenant", accountManager.validateAccessAndGetTenant(principal, tenantId))
         return "app/contacts"
     }
 
-    @GetMapping("/contacts/new/{tenantId}")
+    @GetMapping("/contacts/new")
     fun newContact(model: Model, principal: Principal, @PathVariable("tenantId") tenantId: Long) : String {
         model.addAttribute("account", accountManager.getAccount(principal))
         model.addAttribute("tenant", accountManager.validateAccessAndGetTenant(principal, tenantId))
@@ -42,7 +42,7 @@ class AppWeb(
     }
 
     data class NewContactRequest(val name: String)
-    @PostMapping("/contacts/new/{tenantId}")
+    @PostMapping("/contacts/new")
     fun createNewContact(newContactRequest: NewContactRequest, principal: Principal, @PathVariable("tenantId") tenantId: Long) {
         val tenant = accountManager.validateAccessAndGetTenant(principal, tenantId)
         val contact = ContactAggregate(UUID.randomUUID(), newContactRequest.name, Clock.System.now(), tenant.id)

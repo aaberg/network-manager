@@ -50,7 +50,9 @@ class SecurityConfig {
                 authorize("/app/**", hasRole("USER"))
                 authorize("/account/**", permitAll)
                 authorize("/auth/**", permitAll)
+                authorize("/session/**", permitAll) // temporary
                 authorize("/", permitAll)
+
 
                 // static resources
                 authorize("/webjars/**", permitAll)
@@ -64,7 +66,7 @@ class SecurityConfig {
             formLogin {
                 loginPage = "/auth/login"
                 permitAll()
-                defaultSuccessUrl("/auth/postlogin", true)
+                defaultSuccessUrl("/app/dashboard", true)
             }
         }
 
