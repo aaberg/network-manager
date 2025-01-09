@@ -10,7 +10,7 @@
     <div id="dashboard-container">
         <h1>Dashboard</h1>
 
-        <div th:replace="~{fragments/main.html :: menu-bar(text='')}"></div>
+        <div th:replace="~{fragments/main.html :: menu-bar(tenant=${tenant.id}, text='')}"></div>
     </div>
 </div>
 </body>

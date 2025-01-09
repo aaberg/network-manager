@@ -6,11 +6,11 @@
 <body>
 <div class="main-container">
     <div th:replace="~{fragments/main.html :: menu-overlay}"></div>
-    <div th:replace="~{fragments/main.html :: menu ( activeMenu='New Contact')}"></div>
+    <div th:replace="~{fragments/main.html :: menu (tenant=${tenant.id}, activeMenu='New Contact')}"></div>
     <div id="new-contact-container">
-        <div th:replace="~{fragments/main.html :: menu-bar(text='New Contact', hideSearch=true, hideCreate=true)}"></div>
+        <div th:replace="~{fragments/main.html :: menu-bar(tenant=${tenant.id}, text='New Contact', hideSearch=true, hideCreate=true)}"></div>
 
-        <form id="new-contact-form" class="defaultForm" th:action="@{/app/contacts/new}" method="post">
+        <form id="new-contact-form" class="defaultForm" th:action="@{'/app/'+${tenant.id}+'/contacts/new'}" method="post">
             <label>
                 What is the name of the contact?
                 <input type="text" id="name" name="name" placeholder="name" required />

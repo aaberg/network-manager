@@ -9,7 +9,7 @@
     <div th:replace="~{fragments/main.html :: menu (tenant=${tenant.id}, activeMenu='contacts')}"></div>
     <div id="contacts-container">
 
-        <div th:replace="~{fragments/main.html :: menu-bar(text='Contact list')}"></div>
+        <div th:replace="~{fragments/main.html :: menu-bar(tenant=${tenant.id}, text='Contact list')}"></div>
     </div>
 </div>
 </body>

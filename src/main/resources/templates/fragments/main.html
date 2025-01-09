@@ -21,7 +21,7 @@
     <a class="menu-item" th:classappend="${activeMenu == 'settings'} ? active : inactive">Settings</a>
 </div>
 
-<div th:fragment="menu-bar(text)" class="menu-bar">
+<div th:fragment="menu-bar(tenant, text)" class="menu-bar">
     <svg id="menuButton" width="2em" height="2rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg-btn" onclick="toggleMenu()">
         <rect y="4" width="24" height="2" fill="currentColor"/>
         <rect y="11" width="24" height="2" fill="currentColor"/>
@@ -31,9 +31,8 @@
     <h2 th:text="${text}"></h2>
 
     <div>
-        <th:block th:unless="${hideCreate}">
-            <a th:href="@{/app/contacts/new}" th:hx-get="@{/app/contacts/new}" hx-push-url="true" hx-target="body"
-               hx-swap="outerHtml transition:true" class="icon-link">
+        <th:block th:unless="${hideCreate}" hx-boost="true">
+            <a th:href="@{'/app/'+${tenant}+'/contacts/new'}" class="icon-link">
                 <svg id="plusButton" width="4em" height="2rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="svg-btn">
                     <rect x="10" y="4" width="4" height="16" fill="currentColor"/>
                     <rect x="4" y="10" width="16" height="4" fill="currentColor"/>

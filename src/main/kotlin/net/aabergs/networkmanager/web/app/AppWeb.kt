@@ -3,6 +3,7 @@ package net.aabergs.networkmanager.web.app
 import kotlinx.datetime.Clock
 import net.aabergs.networkmanager.bl.AccountManager
 import net.aabergs.networkmanager.bl.AggregateManager
+import net.aabergs.networkmanager.bl.NewContactCreated
 import net.aabergs.networkmanager.bl.contact.ContactAggregate
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.servlet.view.RedirectView
 import java.security.Principal
 import java.util.*
 
@@ -43,8 +45,11 @@ class AppWeb(
 
     data class NewContactRequest(val name: String)
     @PostMapping("/contacts/new")
-    fun createNewContact(newContactRequest: NewContactRequest, principal: Principal, @PathVariable("tenantId") tenantId: Long) {
+    fun createNewContact(request: NewContactRequest, principal: Principal, @PathVariable("tenantId") tenantId: Long) : RedirectView {
         val tenant = accountManager.validateAccessAndGetTenant(principal, tenantId)
-        val contact = ContactAggregate(UUID.randomUUID(), newContactRequest.name, Clock.System.now(), tenant.id)
+        val contact = ContactAggregate(UUID.randomUUID(), request.name, Clock.System.now(), tenant.id)
+        aggregateManager.saveState(contact)
+
+        return RedirectView("/app/$tenantId/contacts")
     }
 }
