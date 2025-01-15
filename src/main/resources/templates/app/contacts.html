@@ -11,6 +11,9 @@
 
         <div th:replace="~{fragments/main.html :: menu-bar(tenant=${tenant.id}, text='Contact list')}"></div>
     </div>
+    <div th:each="contact : ${contacts}">
+        <div th:text="${contact.name}"></div>
+    </div>
 </div>
 </body>
 </html>

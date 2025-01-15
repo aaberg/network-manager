@@ -33,6 +33,7 @@ class AppWeb(
     fun contacts(model: Model, principal: Principal, @PathVariable("tenantId") tenantId: Long) : String {
         model.addAttribute("account", accountManager.getAccount(principal))
         model.addAttribute("tenant", accountManager.validateAccessAndGetTenant(principal, tenantId))
+        model.addAttribute("contacts", aggregateManager.getContactList(tenantId))
         return "app/contacts"
     }
 
@@ -51,5 +52,13 @@ class AppWeb(
         aggregateManager.saveState(contact)
 
         return RedirectView("/app/$tenantId/contacts")
+    }
+
+    @GetMapping("/contacts/{contactId}")
+    fun editContact(model: Model, principal: Principal, @PathVariable("tenantId") tenantId: Long, @PathVariable("contactId") contactId: UUID) : String {
+        model.addAttribute("tenant", accountManager.validateAccessAndGetTenant(principal, tenantId))
+        model.addAttribute("contact", aggregateManager.loadState<ContactAggregate>(contactId){ContactAggregate()})
+
+        return "app/editContact"
     }
 }

@@ -8,6 +8,7 @@ import net.aabergs.networkmanager.dal.projections.Projection
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Component
 import java.util.*
+import kotlin.reflect.full.primaryConstructor
 
 @Component
 class AggregateManager(val aggregateDal: AggregateDal, val projections: List<Projection>) {
@@ -21,22 +22,12 @@ class AggregateManager(val aggregateDal: AggregateDal, val projections: List<Pro
         }
     }
 
-    fun loadState(aggregateId: UUID) : Aggregate {
+    final inline fun <reified T: Aggregate> loadState(aggregateId: UUID, factory: () -> T) : T {
         val events = aggregateDal.getEventsByAggregateId(aggregateId)
-        val aggregate = createAggregate(events.first().aggregateType)
+        val aggregate = factory()
         aggregate.loadFromHistory(events.map { it.event })
-
         return aggregate
     }
-
-    private fun createAggregate(aggregateType: String) : Aggregate {
-
-        return when (aggregateType) {
-            ContactAggregate::class.java.typeName -> ContactAggregate()
-            else -> throw IllegalArgumentException("Unknown aggregate type: $aggregateType")
-        }
-    }
-
 
     // Functions for fetching projections
     fun getContactList(tenantId: Long) = ContactProjectionsDal().getContactList(tenantId)

@@ -33,7 +33,7 @@ class AggregateManagerTest(
 
         // Act
         aggregateManager.saveState(aggregate)
-        val refetchedAggregate = aggregateManager.loadState(aggregate.id) as ContactAggregate
+        val refetchedAggregate:ContactAggregate = aggregateManager.loadState(aggregate.id){ContactAggregate()}
 
         // Assert
         assertEquals(aggregate.id, refetchedAggregate.id)
