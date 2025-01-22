@@ -12,7 +12,10 @@
         <div th:replace="~{fragments/main.html :: menu-bar(tenant=${tenant.id}, text='Contact list')}"></div>
     </div>
     <div th:each="contact : ${contacts}">
-        <div th:text="${contact.name}"></div>
+        <div>
+            <span th:text="${contact.name}"></span>
+            (<span th:text="${contact.contactAggregateId}"></span>)
+        </div>
     </div>
 </div>
 </body>

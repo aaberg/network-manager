@@ -51,6 +51,7 @@ class ContactAggregate() : Aggregate() {
 
     fun rename(newName: String) = apply(ContactRenamed(newName))
     fun addEmail(email: Email) = apply(EmailAdded(email))
+    fun updateEmail(email: Email) = apply(EmailUpdated(email))
     fun addPhoneNumber(phoneNumber: PhoneNumber) = apply(PhoneNumberAdded(phoneNumber))
     fun removeEmail(email: Email) {
         if (!_emails.contains(email))
@@ -69,6 +70,11 @@ class ContactAggregate() : Aggregate() {
                 tenantId = event.tenantId
             }
             is EmailAdded -> _emails.add(event.email)
+            is EmailUpdated -> {
+                _emails[_emails.indexOfFirst { it.id == event.email.id }] = event.email
+                if (_primaryEmail?.id == event.email.id)
+                    _primaryEmail = event.email
+            }
             is EmailRemoved -> {
                 _emails.remove(event.email)
                 if (_primaryEmail == event.email)

@@ -4,6 +4,55 @@
     <title></title>
 </head>
 <body>
+<div class="main-container">
+    <div th:replace="~{fragments/main.html :: menu-overlay}"></div>
+    <div th:replace="~{fragments/main.html :: menu (tenant=${tenant.id}, activeMenu='contacts')}"></div>
+    <div id="edit-contact-container">
+        <div th:replace="~{fragments/main.html :: menu-bar(tenant=${tenant.id}, text='Edit contact', hideSearch=true, hideCreate=true)}"></div>
+
+        <h1 class="ac pt1" th:text="${contact.name}"></h1>
+        <input type="hidden" th:name="${_csrf.getParameterName()}" th:value="${_csrf.getToken()}" id="contact-csrf" />
+
+        <div class="contact-region">
+            <div class="contact-region-section">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+                <h3>Email</h3>
+            </div>
+            <div class="contact-region-divider"></div>
+            <div th:each="email: ${contact.emails}" class="input-container">
+                <label>
+                    <input type="email"
+                           th:value="${email.email}"
+                           placeholder="email"
+                           class="lucent reversed"
+                           name="email"
+                           th:hx-put="@{/app/{tenantId}/contacts/{contactId}/email/{emailId}(tenantId=${tenant.id}, contactId=${contact.id}, emailId=${email.id})}"
+                           hx-include="[id='contact-csrf']"
+                           hx-target="body"
+                    />
+                    <button type="button" class="remove-btn reversed"
+                            th:hx-delete="@{/app/{tenantId}/contacts/{contactId}/email/{emailId}(tenantId=${tenant.id}, contactId=${contact.id}, emailId=${email.id})}"
+                            hx-include="[id='contact-csrf']"
+                            hx-target="body"
+                    >x</button>
+                </label>
+            </div>
+            <a class="contact-region-section" href="#"
+               th:hx-post="@{/app/{tenant}/contacts/{contact}/email(tenant=${tenant.id}, contact=${contact.id})}"
+               hx-include="[id='contact-csrf']"
+               hx-target="body"
+            >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="10" y="4" width="4" height="16" fill="currentColor"/>
+                    <rect x="4" y="10" width="16" height="4" fill="currentColor"/>
+                </svg>
+                Add Email
+            </a>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

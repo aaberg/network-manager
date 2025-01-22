@@ -3,6 +3,8 @@ package net.aabergs.networkmanager.bl.contact
 import kotlinx.datetime.Clock
 import net.aabergs.networkmanager.bl.*
 import net.aabergs.networkmanager.bl.InvalidStateException
+import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.util.*
@@ -19,30 +21,46 @@ class ContactAggregateTest {
 
         // Act
         contactAggregate.rename("Kari Normannsen")
-        contactAggregate.addEmail(Email("kari@normannsen.com"))
+        val email = Email(UUID.randomUUID(), "kari@normannsen.com");
+        val updatedEmail = Email(email.id, "aother@email.com")
+        contactAggregate.addEmail(email)
         contactAggregate.addPhoneNumber(PhoneNumber("12345678"))
-        contactAggregate.primaryEmail = Email("kari@normannsen.com")
+        contactAggregate.primaryEmail = email
         contactAggregate.primaryPhoneNumber = PhoneNumber("12345678")
-        contactAggregate.removeEmail(Email("kari@normannsen.com"))
+        contactAggregate.updateEmail(updatedEmail)
+        contactAggregate.removeEmail(updatedEmail)
         contactAggregate.removePhoneNumber(PhoneNumber("12345678"))
 
         // Assert
-        assert(contactAggregate.getUncommittedEvents().size == 8)
-        assert(contactAggregate.getUncommittedEvents()[0] == NewContactCreated(id, "Kari Normann", createdTime, 1))
-        assert(contactAggregate.getUncommittedEvents()[1] == ContactRenamed("Kari Normannsen"))
-        assert(contactAggregate.getUncommittedEvents()[2] == EmailAdded(Email("kari@normannsen.com")))
-        assert(contactAggregate.getUncommittedEvents()[3] == PhoneNumberAdded(PhoneNumber("12345678")))
-        assert(contactAggregate.getUncommittedEvents()[4] == PrimaryEmailSet(Email("kari@normannsen.com")))
-        assert(contactAggregate.getUncommittedEvents()[5] == PrimaryPhoneNumberSet(PhoneNumber("12345678")))
-        assert(contactAggregate.getUncommittedEvents()[6] == EmailRemoved(Email("kari@normannsen.com")))
-        assert(contactAggregate.getUncommittedEvents()[7] == PhoneNumberRemoved(PhoneNumber("12345678")))
+        assertThat(contactAggregate.getUncommittedEvents()).hasSize(9)
+        assertThat(contactAggregate.getUncommittedEvents()).containsExactly(
+            NewContactCreated(id, "Kari Normann", createdTime, 1),
+            ContactRenamed("Kari Normannsen"),
+            EmailAdded(email),
+            PhoneNumberAdded(PhoneNumber("12345678")),
+            PrimaryEmailSet(email),
+            PrimaryPhoneNumberSet(PhoneNumber("12345678")),
+            EmailUpdated(updatedEmail),
+            EmailRemoved(updatedEmail),
+            PhoneNumberRemoved(PhoneNumber("12345678"))
+        )
+//        assert(contactAggregate.getUncommittedEvents()[0] == NewContactCreated(id, "Kari Normann", createdTime, 1))
+//        assert(contactAggregate.getUncommittedEvents()[1] == ContactRenamed("Kari Normannsen"))
+//        assert(contactAggregate.getUncommittedEvents()[2] == EmailAdded(email))
+//        assert(contactAggregate.getUncommittedEvents()[3] == PhoneNumberAdded(PhoneNumber("12345678")))
+//        assert(contactAggregate.getUncommittedEvents()[4] == PrimaryEmailSet(email))
+//        assert(contactAggregate.getUncommittedEvents()[5] == PrimaryPhoneNumberSet(PhoneNumber("12345678")))
+//
+//        assert(contactAggregate.getUncommittedEvents()[6] == EmailUpdated(updatedEmail))
+//        assert(contactAggregate.getUncommittedEvents()[7] == EmailRemoved(updatedEmail))
+//        assert(contactAggregate.getUncommittedEvents()[8] == PhoneNumberRemoved(PhoneNumber("12345678")))
 
-        assert(contactAggregate.name == "Kari Normannsen")
-        assert(contactAggregate.emails.isEmpty())
-        assert(contactAggregate.phoneNumbers.isEmpty())
-        assert(contactAggregate.primaryEmail == null)
-        assert(contactAggregate.primaryPhoneNumber == null)
-        assertEquals(1, contactAggregate.tenantId)
+        assertThat(contactAggregate.name).isEqualTo("Kari Normannsen")
+        assertThat(contactAggregate.emails).isEmpty()
+        assertThat(contactAggregate.phoneNumbers).isEmpty()
+        assertThat(contactAggregate.primaryEmail).isNull()
+        assertThat(contactAggregate.primaryPhoneNumber).isNull()
+        assertThat(contactAggregate.tenantId).isEqualTo(1)
     }
 
     @Test
@@ -53,11 +71,11 @@ class ContactAggregateTest {
         val contactAggregate = ContactAggregate(id, "Kari Normann", createdTime, 1)
 
         // Act
-        contactAggregate.addEmail(Email("kari@normann.no"))
+        contactAggregate.addEmail(Email(UUID.randomUUID(), "kari@normann.no"))
 
         // Assert
         assertThrows<InvalidStateException>("Email must be added to contact before it can be set as primary") {
-            contactAggregate.primaryEmail = Email("something@wrong.com")
+            contactAggregate.primaryEmail = Email(UUID.randomUUID(), "something@wrong.com")
         }
     }
 
@@ -83,15 +101,15 @@ class ContactAggregateTest {
         val id = UUID.randomUUID()
         val createdTime = Clock.System.now()
         val contactAggregate = ContactAggregate(id, "Kari Normann", createdTime, 1)
-        contactAggregate.addEmail(Email("kari@normann.com"))
+        contactAggregate.addEmail(Email(UUID.randomUUID(), "kari@normann.com"))
 
         // Act
         assertThrows<InvalidStateException>("Email not found in contact") {
-            contactAggregate.removeEmail(Email("something@else.com"))
+            contactAggregate.removeEmail(Email(UUID.randomUUID(), "something@else.com"))
         }
 
         // Assert
         assertEquals(1, contactAggregate.emails.size)
-        assertEquals(Email("kari@normann.com"), contactAggregate.emails[0])
+        assertEquals("kari@normann.com", contactAggregate.emails[0].email)
     }
 }

@@ -29,7 +29,8 @@ class AggregateManagerTest(
         // Arrange
         val aggregate = ContactAggregate(UUID.randomUUID(), "Test Test", Clock.System.now(), 1)
         aggregate.rename("Test Test 2")
-        aggregate.addEmail(Email("something@else.com"))
+        val email = Email(UUID.randomUUID(),"something@else.com")
+        aggregate.addEmail(email)
 
         // Act
         aggregateManager.saveState(aggregate)

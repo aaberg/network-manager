@@ -32,7 +32,7 @@ img {
 
 a {
     text-decoration: underline;
-    color: var(--primary-text-color);
+    color: inherit;
 }
 a.icon-link {
     text-decoration: none;
@@ -45,11 +45,39 @@ form.defaultForm {
 /* Input styles */
 input[type="text"], input[type="password"], input[type="email"], input[type="tel"] {
     width: 100%;
-    padding: 1rem;
+    padding: 0.5rem;
+    font-size: 1.2rem;
     margin: 0.5rem 0;
     border: 1px solid var(--primary-text-color);
     border-radius: var(--input-border-radius);
     background-color: var(--background-form-color);
+    color: var(--primary-text-color);
+}
+
+input.lucent {
+    background-color: transparent;
+    border-width: 0 0 1px 0;
+    border-radius: 0;
+}
+
+input.reversed, button.reversed {
+    border-color: var(--background-color);
+    color: var(--secondary-text-color);
+}
+
+.input-container {
+    position: relative;
+}
+.remove-btn {
+    position: absolute;
+    right: 10px;
+    top: 40%;
+    width: 1rem;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18pt;
     color: var(--primary-text-color)
 }
 
@@ -78,6 +106,11 @@ button {
 }
 .svg-btn:active {
     transform: scale(0.9);
+}
+
+.main-container {
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 /* Memu */
@@ -149,5 +182,36 @@ div.form-control {
     background-color: var(--background-color);
     font-size: 15pt;
     padding: 1rem;
+}
+
+/** Contact region **/
+.contact-region {
+    padding:1rem;
+    margin:1rem;
+    background-color: var(--orange-background-color );
+    color: var(--secondary-text-color);
+    border-radius: 15px;
+}
+
+.contact-region-section {
+    display: flex;
+    gap: 1rem;
+}
+.contact-region-divider {
+    border-bottom: 1px solid var(--secondary-text-color);
+    margin: 1rem 0;
+}
+
+/*
+
+/** Content **/
+.ac{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pt1 {
+    padding-top: 1rem;
 }
 

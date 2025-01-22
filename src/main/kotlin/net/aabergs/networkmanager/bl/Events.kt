@@ -14,6 +14,7 @@ sealed interface Event{}
 @Serializable data class ContactRenamed(val newName: String) : Event
 @Serializable data class EmailAdded(val email: Email) : Event
 @Serializable data class EmailRemoved(val email: Email) : Event
+@Serializable data class EmailUpdated(val email: Email) : Event
 @Serializable data class PrimaryEmailSet(val email: Email?) : Event
 @Serializable data class PhoneNumberAdded(val phoneNumber: PhoneNumber) : Event
 @Serializable data class PhoneNumberRemoved(val phoneNumber: PhoneNumber) : Event
