@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{fragments/main.html :: head(title=${contact.name})}">
+    <title></title>
+</head>
+<body>
+<div class="main-container">
+    <div th:replace="~{fragments/main.html :: menu-overlay}"></div>
+    <div th:replace="~{fragments/main.html :: menu (tenant=${tenant.id}, activeMenu='contacts')}"></div>
+    <div id="edit-contact-container">
+        <div th:replace="~{fragments/main.html :: menu-bar(tenant=${tenant.id}, text='Edit contact', hideSearch=true, hideCreate=true)}"></div>
+
+        <h1 class="ac pt1" th:text="${contact.name}"></h1>
+        <div th:replace="~{editContact/fragments/email.html :: edit-email(contact=${contact}, tenant=${tenant})}"></div>
+    </div>
+</div>
+
+</body>
+</html>

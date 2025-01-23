@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component
 import org.springframework.web.context.annotation.RequestScope
 import java.net.URLDecoder
 import java.net.URLEncoder
-import java.security.Principal
 
 @Component
 @RequestScope(proxyMode = ScopedProxyMode.TARGET_CLASS)
