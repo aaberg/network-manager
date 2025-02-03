@@ -18,11 +18,11 @@ class ContactAggregate() : Aggregate() {
     var tenantId = 0L
         private set
 
-    private var _emails = mutableListOf<Email>()
+    private val _emails = mutableListOf<Email>()
     val emails: List<Email>
         get() = _emails
 
-    private var _phoneNumbers = mutableListOf<PhoneNumber>()
+    private val _phoneNumbers = mutableListOf<PhoneNumber>()
     val phoneNumbers: List<PhoneNumber>
         get() = _phoneNumbers
 
@@ -46,6 +46,13 @@ class ContactAggregate() : Aggregate() {
             apply(PrimaryPhoneNumberSet(value))
         }
 
+    var note = ""
+        private set
+
+    private val _logEntries = mutableListOf<LogEntry>()
+    val logEntries: List<LogEntry>
+        get() = _logEntries
+
     var isDeleted = false
         private set
 
@@ -59,6 +66,7 @@ class ContactAggregate() : Aggregate() {
         apply(EmailRemoved(email))
     }
     fun removePhoneNumber(phoneNumber: PhoneNumber) = apply(PhoneNumberRemoved(phoneNumber))
+    fun updateNote(note: String) = apply(NoteUpdated(note))
     fun delete() = apply(ContactDeleted())
 
     override fun update(event: Event) {
@@ -89,6 +97,7 @@ class ContactAggregate() : Aggregate() {
             }
             is PrimaryPhoneNumberSet -> _primaryPhoneNumber = event.phoneNumber
             is ContactRenamed -> name = event.newName
+            is NoteUpdated -> note = event.note
             is ContactDeleted -> isDeleted = true
         }
     }

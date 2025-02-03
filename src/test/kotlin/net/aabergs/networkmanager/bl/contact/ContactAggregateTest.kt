@@ -23,13 +23,14 @@ class ContactAggregateTest {
         contactAggregate.rename("Kari Normannsen")
         val email = Email(UUID.randomUUID(), "kari@normannsen.com");
         val updatedEmail = Email(email.id, "aother@email.com")
+        val phone = PhoneNumber(UUID.randomUUID(), "12345678")
         contactAggregate.addEmail(email)
-        contactAggregate.addPhoneNumber(PhoneNumber("12345678"))
+        contactAggregate.addPhoneNumber(phone)
         contactAggregate.primaryEmail = email
-        contactAggregate.primaryPhoneNumber = PhoneNumber("12345678")
+        contactAggregate.primaryPhoneNumber = phone
         contactAggregate.updateEmail(updatedEmail)
         contactAggregate.removeEmail(updatedEmail)
-        contactAggregate.removePhoneNumber(PhoneNumber("12345678"))
+        contactAggregate.removePhoneNumber(phone)
 
         // Assert
         assertThat(contactAggregate.getUncommittedEvents()).hasSize(9)
@@ -37,23 +38,13 @@ class ContactAggregateTest {
             NewContactCreated(id, "Kari Normann", createdTime, 1),
             ContactRenamed("Kari Normannsen"),
             EmailAdded(email),
-            PhoneNumberAdded(PhoneNumber("12345678")),
+            PhoneNumberAdded(phone),
             PrimaryEmailSet(email),
-            PrimaryPhoneNumberSet(PhoneNumber("12345678")),
+            PrimaryPhoneNumberSet(phone),
             EmailUpdated(updatedEmail),
             EmailRemoved(updatedEmail),
-            PhoneNumberRemoved(PhoneNumber("12345678"))
+            PhoneNumberRemoved(phone)
         )
-//        assert(contactAggregate.getUncommittedEvents()[0] == NewContactCreated(id, "Kari Normann", createdTime, 1))
-//        assert(contactAggregate.getUncommittedEvents()[1] == ContactRenamed("Kari Normannsen"))
-//        assert(contactAggregate.getUncommittedEvents()[2] == EmailAdded(email))
-//        assert(contactAggregate.getUncommittedEvents()[3] == PhoneNumberAdded(PhoneNumber("12345678")))
-//        assert(contactAggregate.getUncommittedEvents()[4] == PrimaryEmailSet(email))
-//        assert(contactAggregate.getUncommittedEvents()[5] == PrimaryPhoneNumberSet(PhoneNumber("12345678")))
-//
-//        assert(contactAggregate.getUncommittedEvents()[6] == EmailUpdated(updatedEmail))
-//        assert(contactAggregate.getUncommittedEvents()[7] == EmailRemoved(updatedEmail))
-//        assert(contactAggregate.getUncommittedEvents()[8] == PhoneNumberRemoved(PhoneNumber("12345678")))
 
         assertThat(contactAggregate.name).isEqualTo("Kari Normannsen")
         assertThat(contactAggregate.emails).isEmpty()
@@ -85,13 +76,14 @@ class ContactAggregateTest {
         val id = UUID.randomUUID()
         val createdTime = Clock.System.now()
         val contactAggregate = ContactAggregate(id, "Kari Normann", createdTime, 1)
+        val phoneId = UUID.randomUUID()
 
         // Act
-        contactAggregate.addPhoneNumber(PhoneNumber("12345678"))
+        contactAggregate.addPhoneNumber(PhoneNumber(phoneId, "12345678"))
 
         // Assert
         assertThrows<InvalidStateException>("Phone number must be added to contact before it can be set as primary") {
-            contactAggregate.primaryPhoneNumber = PhoneNumber("87654321")
+            contactAggregate.primaryPhoneNumber = PhoneNumber(phoneId, "87654321")
         }
     }
 
@@ -111,5 +103,29 @@ class ContactAggregateTest {
         // Assert
         assertEquals(1, contactAggregate.emails.size)
         assertEquals("kari@normann.com", contactAggregate.emails[0].email)
+    }
+
+    @Test
+    fun `when ContactAggregate updateNote is called note is successfully updated`() {
+        // Arrange
+        val id = UUID.randomUUID()
+        val createTime = Clock.System.now()
+        val contactAggregate = ContactAggregate(id, "The Dude", createTime, 1)
+
+        // Assert initial state
+        assertThat(contactAggregate.note).isEqualTo("")
+        assertThat(contactAggregate.getUncommittedEvents()).containsExactly(
+            NewContactCreated(id, "The Dude", createTime, 1)
+        )
+
+        // Act
+        contactAggregate.updateNote("This is a very interesting note")
+
+        // Assert
+        assertThat(contactAggregate.note).isEqualTo("This is a very interesting note")
+        assertThat(contactAggregate.getUncommittedEvents()).containsExactly(
+            NewContactCreated(id, "The Dude", createTime, 1),
+            NoteUpdated("This is a very interesting note")
+        )
     }
 }
