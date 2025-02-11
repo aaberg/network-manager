@@ -59,6 +59,13 @@ class ContactAggregate() : Aggregate() {
     fun rename(newName: String) = apply(ContactRenamed(newName))
     fun addEmail(email: Email) = apply(EmailAdded(email))
     fun updateEmail(email: Email) = apply(EmailUpdated(email))
+    fun setEmail(email: Email) {
+        if (emails.any{it.id == email.id}) {
+            apply(EmailUpdated(email))
+        } else {
+            apply(EmailAdded(email))
+        }
+    }
     fun addPhoneNumber(phoneNumber: PhoneNumber) = apply(PhoneNumberAdded(phoneNumber))
     fun removeEmail(email: Email) {
         if (!_emails.contains(email))

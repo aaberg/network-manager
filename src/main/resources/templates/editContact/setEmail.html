@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Add email</h2>
+    <form th:hx-post="@{/app/{tenantId}/contacts/{contactId}/set-email(tenantId=${tenant.id}, contactId=${contact.id})}"
+          hx-swap="outerHTML"
+          hx-target="#emails"
+    >
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="hidden" name="id" th:value="${email.id}" />
+        <label>
+            <input type="email" name="email" placeholder="email" required class="reversed" th:value="${email.email}" />
+        </label>
+        <label>
+            <input type="checkbox" name="isPrimary" id="isPrimary" th:checked="${contact.primaryEmail == email}" />
+            Set as primary email
+        </label>
+        <div>
+            <button type="submit" class="primary mr-2" th:text="${isNew ? 'Add Email' : 'Update Email'}">Add Email</button>
+            <a href="#"
+               th:hx-get="@{/app/{tenantId}/contacts/{contactId}/emails(tenantId=${tenant.id}, contactId=${contact.id})}"
+               hx-target="#emails"
+               hx-swap="outerHTML"
+               hx-trigger="click"
+            >
+                Cancel
+            </a>
+        </div>
+    </form>
+</body>
+</html>

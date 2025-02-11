@@ -12,3 +12,10 @@ function toggleMenu() {
         menuOverlay.classList.toggle('active');
     });
 }
+
+function toggleListItem(event, selector) {
+    document.querySelectorAll(selector)
+        .forEach(element => element.classList.remove('selected'));
+
+    event.currentTarget.classList.add('selected');
+}

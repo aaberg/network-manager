@@ -1,6 +1,7 @@
 @import url(defaultfont.css);
 @import url(theme.css);
 @import url(login.css);
+@import url(cleanlist.css);
 
 html {
     box-sizing: border-box;
@@ -54,20 +55,19 @@ input[type="text"], input[type="password"], input[type="email"], input[type="tel
     color: var(--primary-text-color);
 }
 
-input.lucent {
-    background-color: transparent;
-    border-width: 0 0 1px 0;
-    border-radius: 0;
+input[type="checkbox"] {
+    /*width: 20px;*/
+    /*height: 20px;*/
+    transform: scale(1.5);
+    margin-right: 10px;
 }
 
-input.reversed, button.reversed {
+input.reversed {
     border-color: var(--background-color);
     color: var(--secondary-text-color);
+    background-color: var(--primary-text-color);
 }
 
-.input-container {
-    position: relative;
-}
 .remove-btn {
     position: absolute;
     right: 10px;
@@ -82,8 +82,8 @@ input.reversed, button.reversed {
 }
 
 button {
-    width: 100%;
-    padding: 0.5rem;
+
+    padding: 0.5rem 2rem;
     margin: 0.5rem 0;
     border: 0;
     border-radius: var(--input-border-radius);
@@ -188,9 +188,12 @@ div.form-control {
 .contact-region {
     padding:1rem;
     margin:1rem;
-    background-color: var(--orange-background-color );
     color: var(--secondary-text-color);
     border-radius: 15px;
+}
+
+.contact-region.orange {
+    background-color: var(--orange-background-color);
 }
 
 .contact-region-section {
@@ -213,5 +216,9 @@ div.form-control {
 
 .pt1 {
     padding-top: 1rem;
+}
+
+.mr-2 {
+    margin-right: 2rem;
 }
 

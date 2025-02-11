@@ -11,12 +11,13 @@
 
         <div th:replace="~{fragments/main.html :: menu-bar(tenant=${tenant.id}, text='Contact list')}"></div>
     </div>
-    <div th:each="contact : ${contacts}">
-        <div>
-            <span th:text="${contact.name}"></span>
-            (<span th:text="${contact.contactAggregateId}"></span>)
-        </div>
-    </div>
+    <ul class="clean-list">
+        <li th:each="contact: ${contacts}">
+            <a th:href="@{/app/{tenantId}/contacts/{contactId}(tenantId=${tenant.id}, contactId=${contact.contactAggregateId})}">
+                <span th:text="${contact.name}" th:style="|view-transition-name: ${contact.contactAggregateId}|"></span>
+            </a>
+        </li>
+    </ul>
 </div>
 </body>
 </html>

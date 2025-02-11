@@ -16,10 +16,11 @@ class EditContactWeb(
     private val accountManager: AccountManager,
     private val aggregateManager: AggregateManager) {
 
-    @GetMapping()
+    @GetMapping
     fun editContact(model: Model, principal: Principal, @PathVariable("tenantId") tenantId: Long, @PathVariable("contactId") contactId: UUID) : String {
         model.addAttribute("tenant", accountManager.validateAccessAndGetTenant(principal, tenantId))
-        model.addAttribute("contact", aggregateManager.loadState<ContactAggregate>(contactId){ ContactAggregate() })
+        val contact = aggregateManager.loadState<ContactAggregate>(contactId){ ContactAggregate() }
+        model.addAttribute("contact", contact)
 
         return "editContact/editContact"
     }
@@ -33,79 +34,53 @@ class EditContactWeb(
     }
 
     @GetMapping("/add-email")
-    fun getAddEmailView(model: Model, principal: Principal, @PathVariable("tenantId") tenantId: Long, @PathVariable("contactId") contactId: UUID) : String {
+    fun getAddEmailView(model: Model,
+                        principal: Principal,
+                        @PathVariable("tenantId") tenantId: Long,
+                        @PathVariable("contactId") contactId: UUID) : String {
         model.addAttribute("tenant", accountManager.validateAccessAndGetTenant(principal, tenantId))
         model.addAttribute("contact", aggregateManager.loadState<ContactAggregate>(contactId) { ContactAggregate() })
+        model.addAttribute("email", Email(UUID.randomUUID(), ""))
+        model.addAttribute("isNew", true)
 
-        return "editContact/addEmail"
+        return "editContact/setEmail"
     }
 
-    @PostMapping("/add-email")
-    fun addEmail(model: Model, principal: Principal, @PathVariable("tenantId") tenantId: Long,
-                 @PathVariable("contactId") contactId: UUID, email: String, isPrimary: Boolean) : String {
-        val contact = aggregateManager.loadState(contactId) { ContactAggregate() }
-        val emailObj = Email(UUID.randomUUID(), email)
+    @GetMapping("/update-email/{emailId}")
+    fun updateEmailView(model: Model,
+                        principal: Principal,
+                        @PathVariable("tenantId") tenantId: Long,
+                        @PathVariable("contactId") contactId: UUID,
+                        @PathVariable("emailId") emailId: UUID) : String {
+        model.addAttribute("tenant", accountManager.validateAccessAndGetTenant(principal, tenantId))
+        val contact = aggregateManager.loadState<ContactAggregate>(contactId) { ContactAggregate() }
+        model.addAttribute("contact", contact)
 
-        contact.addEmail(emailObj)
-        if (isPrimary) {
-            contact.primaryEmail = emailObj
+        val email = contact.emails.first { it.id == emailId }
+        model.addAttribute("email", email)
+        model.addAttribute("isNew", false)
+
+        return "editContact/setEmail"
+    }
+
+    data class SetEmailForm(
+        val id: UUID,
+        val email: String,
+        val isPrimary: Boolean = false
+    )
+    @PostMapping("/set-email")
+    fun setEmail(model: Model, principal: Principal, @PathVariable("tenantId") tenantId: Long,
+                 @PathVariable("contactId") contactId: UUID,
+                 emailForm: SetEmailForm) : String {
+        val contact = aggregateManager.loadState(contactId) { ContactAggregate() }
+        val email = Email(emailForm.id, emailForm.email)
+
+        contact.setEmail(email)
+        if (emailForm.isPrimary) {
+            contact.primaryEmail = email
         }
         aggregateManager.saveState(contact)
 
         return emailView(model, principal, tenantId, contactId)
     }
-
-
-//    @PostMapping("/email")
-//    fun addEmail(model: Model, principal: Principal, @PathVariable("tenantId") tenantId: Long, @PathVariable("contactId") contactId: UUID) : String {
-//        model.addAttribute("tenant", accountManager.validateAccessAndGetTenant(principal, tenantId))
-//        val contact = aggregateManager.loadState(contactId) { ContactAggregate() }
-//        contact.addEmail(Email(UUID.randomUUID(),""))
-//
-//        aggregateManager.saveState(contact)
-//        model.addAttribute("contact", contact)
-//
-//        return "editContact/editContact"
-//    }
-
-//    @PutMapping("/email/{emailId}")
-//    fun updateEmail(
-//        model: Model,
-//        principal: Principal,
-//        @PathVariable("tenantId") tenantId: Long,
-//        @PathVariable("contactId") contactId: UUID,
-//        @PathVariable("emailId") emailId: UUID,
-//        email: String)
-//            : String
-//    {
-//        model.addAttribute("tenant", accountManager.validateAccessAndGetTenant(principal, tenantId))
-//        val contact = aggregateManager.loadState(contactId) { ContactAggregate() }
-//        contact.updateEmail(Email(emailId, email))
-//
-//        aggregateManager.saveState(contact)
-//        model.addAttribute("contact", contact)
-//
-//        return "editContact/editContact"
-//    }
-//
-//    @DeleteMapping("/email/{emailId}")
-//    fun removeEmail(
-//        model: Model,
-//        principal: Principal,
-//        @PathVariable("tenantId") tenantId: Long,
-//        @PathVariable("contactId") contactId: UUID,
-//        @PathVariable("emailId") emailId: UUID
-//    )
-//            : String {
-//        model.addAttribute("tenant", accountManager.validateAccessAndGetTenant(principal, tenantId))
-//
-//        val contact = aggregateManager.loadState(contactId) { ContactAggregate() }
-//
-//        contact.removeEmail(contact.emails.find { it.id == emailId } ?: throw IllegalArgumentException("Email not found"))
-//        aggregateManager.saveState(contact)
-//
-//        model.addAttribute("contact", contact)
-//
-//        return "editContact/editContact"
-//    }
 }

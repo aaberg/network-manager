@@ -1,0 +1,26 @@
+ul.clean-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul.clean-list li {
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.orange ul.clean-list li.selected {
+    background-color: var(--orange-background-selected-color);
+    border-radius: 100px;
+}
+
+.orange ul.clean-list .clean-list-controls {
+    visibility: hidden;
+    height: 0;
+}
+
+.orange ul.clean-list li.selected .clean-list-controls {
+    visibility: inherit;
+    height: inherit;
+}
