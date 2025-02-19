@@ -1,6 +1,7 @@
 package net.aabergs.networkmanager.bl.contact
 
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import net.aabergs.networkmanager.bl.*
 import net.aabergs.networkmanager.bl.InvalidStateException
 import org.assertj.core.api.Assertions
@@ -126,6 +127,30 @@ class ContactAggregateTest {
         assertThat(contactAggregate.getUncommittedEvents()).containsExactly(
             NewContactCreated(id, "The Dude", createTime, 1),
             NoteUpdated("This is a very interesting note")
+        )
+    }
+
+    @Test
+    fun `when logEvent and removeLoggedEvent are called expect correct events`() {
+        // Arrange
+        val id = UUID.randomUUID()
+        val createTime = Clock.System.now()
+        val contactAggregate = ContactAggregate(id, "The Dude", createTime, 1)
+        val logEntry = LogEntry(UUID.randomUUID(), Clock.System.now(), "custom type", "This is a log entry", Icon.Other)
+
+        // Assert that logEvent works
+        contactAggregate.logEvent(logEntry)
+        assertThat(contactAggregate.connectionLog).containsExactly(logEntry)
+
+        // Assert that the logEvent can be removed
+        contactAggregate.removeLoggedEvent(logEntry)
+        assertThat(contactAggregate.connectionLog).isEmpty()
+
+        // Assert events
+        assertThat(contactAggregate.getUncommittedEvents()).containsExactly(
+            NewContactCreated(id, "The Dude", createTime, 1),
+            ConnectionLogEntryAdded(logEntry),
+            ConnectionLogEntryRemoved(logEntry)
         )
     }
 }

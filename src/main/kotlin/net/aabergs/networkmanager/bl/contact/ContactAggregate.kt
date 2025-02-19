@@ -49,9 +49,9 @@ class ContactAggregate() : Aggregate() {
     var note = ""
         private set
 
-    private val _logEntries = mutableListOf<LogEntry>()
-    val logEntries: List<LogEntry>
-        get() = _logEntries
+    private val _connectionLog = mutableListOf<LogEntry>()
+    val connectionLog: List<LogEntry>
+        get() = _connectionLog
 
     var isDeleted = false
         private set
@@ -75,6 +75,13 @@ class ContactAggregate() : Aggregate() {
     fun removePhoneNumber(phoneNumber: PhoneNumber) = apply(PhoneNumberRemoved(phoneNumber))
     fun updateNote(note: String) = apply(NoteUpdated(note))
     fun delete() = apply(ContactDeleted())
+
+    fun logEvent(logEntry: LogEntry) = apply(ConnectionLogEntryAdded(logEntry))
+    fun removeLoggedEvent(logEntry: LogEntry) {
+        if (!_connectionLog.contains(logEntry))
+            throw InvalidStateException("Log entry not found in contact")
+        apply(ConnectionLogEntryRemoved(logEntry))
+    }
 
     override fun update(event: Event) {
         when (event) {
@@ -106,6 +113,8 @@ class ContactAggregate() : Aggregate() {
             is ContactRenamed -> name = event.newName
             is NoteUpdated -> note = event.note
             is ContactDeleted -> isDeleted = true
+            is ConnectionLogEntryAdded -> _connectionLog.add(event.logEntry)
+            is ConnectionLogEntryRemoved -> _connectionLog.remove(event.logEntry)
         }
     }
 

@@ -20,6 +20,7 @@ class AggregateManager(val aggregateDal: AggregateDal, val projections: List<Pro
                 projections.forEach { it.apply(event, aggregate.id) }
             }
         }
+        aggregate.clearUncommittedEvents()
     }
 
     final inline fun <reified T: Aggregate> loadState(aggregateId: UUID, factory: () -> T) : T {

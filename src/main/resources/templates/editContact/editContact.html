@@ -11,7 +11,7 @@
         <div th:replace="~{fragments/main.html :: menu-bar(tenant=${tenant.id}, text='Edit contact', hideSearch=true, hideCreate=true)}"></div>
 
         <h1 class="ac pt1">
-            <span th:text="${contact.name}" th:style="|view-transition-name: ${contact.id}|"></span>
+            <span th:text="${contact.name}" th:style="|view-transition-name: cid-${contact.id}|"></span>
         </h1>
         <div th:replace="~{editContact/fragments/email.html :: edit-email(contact=${contact}, tenant=${tenant})}"></div>
     </div>

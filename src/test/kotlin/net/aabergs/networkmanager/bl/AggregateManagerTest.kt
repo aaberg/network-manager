@@ -4,6 +4,8 @@ import kotlinx.datetime.Clock
 import net.aabergs.networkmanager.bl.contact.ContactAggregate
 import net.aabergs.networkmanager.bl.contact.Email
 import net.aabergs.networkmanager.dal.dropAndCreateSchema
+import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.*
 import org.jetbrains.exposed.sql.Database
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
@@ -41,5 +43,18 @@ class AggregateManagerTest(
         assertEquals(aggregate.version, refetchedAggregate.version)
         assertEquals(aggregate.name, refetchedAggregate.name)
         assertEquals(aggregate.emails, refetchedAggregate.emails)
+    }
+
+    @Test
+    fun `when the state of an aggregate is saved, the uncommitted events are cleared`() {
+        // Arrange
+        val aggregate = ContactAggregate(UUID.randomUUID(), "Test 123", Clock.System.now(), 1)
+        aggregate.rename("Test 456")
+
+        // Act
+        aggregateManager.saveState(aggregate)
+
+        // Assert
+        assertThat(aggregate.getUncommittedEvents()).isEmpty()
     }
 }

@@ -3,6 +3,7 @@ package net.aabergs.networkmanager.bl
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import net.aabergs.networkmanager.bl.contact.Email
+import net.aabergs.networkmanager.bl.contact.LogEntry
 import net.aabergs.networkmanager.bl.contact.PhoneNumber
 import net.aabergs.networkmanager.utils.UUIDSerializer
 import java.util.*
@@ -21,6 +22,8 @@ sealed interface Event{}
 @Serializable data class PrimaryPhoneNumberSet(val phoneNumber: PhoneNumber?) : Event
 @Serializable data class NoteUpdated(val note: String) : Event
 @Serializable class ContactDeleted : Event
+@Serializable data class ConnectionLogEntryAdded(val logEntry: LogEntry) : Event
+@Serializable data class ConnectionLogEntryRemoved(val logEntry: LogEntry) : Event
 
 //object UUIDSerializer : KSerializer<UUID> {
 //    override val descriptor = PrimitiveSerialDescriptor("UUID", PrimitiveKind.STRING)
