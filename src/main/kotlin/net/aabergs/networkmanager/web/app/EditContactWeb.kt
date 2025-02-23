@@ -11,7 +11,7 @@ import java.security.Principal
 import java.util.*
 
 @Controller
-@RequestMapping("/app/{tenantId}/contacts/{contactId}")
+@RequestMapping("/app/{tenantId}/contacts2/{contactId}")
 class EditContactWeb(
     private val accountManager: AccountManager,
     private val aggregateManager: AggregateManager) {

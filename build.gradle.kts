@@ -2,9 +2,9 @@ plugins {
 	kotlin("jvm") version "1.9.25"
 	kotlin("plugin.spring") version "1.9.25"
 	kotlin("plugin.serialization") version "2.1.0"
-	id("org.springframework.boot") version "3.4.2"
+	id("org.springframework.boot") version "3.4.3"
 	id("io.spring.dependency-management") version "1.1.7"
-	id("org.graalvm.buildtools.native") version "0.10.4"
+//	id("org.graalvm.buildtools.native") version "0.10.4"
 }
 
 group = "net.aabergs"
@@ -20,6 +20,12 @@ repositories {
 	mavenCentral()
 }
 
+dependencyManagement {
+	imports {
+		mavenBom("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom:2.13.1")
+	}
+}
+
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -27,6 +33,11 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
+
+	// <otel>
+	implementation("io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter")
+	// </otel>
+
 	//implementation("io.github.wimdeblauwe:htmx-spring-boot-thymeleaf:3.6.0")
 	implementation(libs.webjars.locator.core)
 	implementation(libs.htmx)
@@ -40,7 +51,7 @@ dependencies {
 	runtimeOnly(libs.hikaricp)
 
 
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
+//	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

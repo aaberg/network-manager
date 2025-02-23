@@ -6,7 +6,7 @@
 </head>
 <body>
 <h2>Add email</h2>
-    <form th:hx-post="@{/app/{tenantId}/contacts/{contactId}/set-email(tenantId=${tenant.id}, contactId=${contact.id})}"
+    <form th:hx-post="@{/app/{tenantId}/contacts2/{contactId}/set-email(tenantId=${tenant.id}, contactId=${contact.id})}"
           hx-swap="outerHTML"
           hx-target="#emails"
     >
@@ -22,7 +22,7 @@
         <div>
             <button type="submit" class="primary mr-2" th:text="${isNew ? 'Add Email' : 'Update Email'}">Add Email</button>
             <a href="#"
-               th:hx-get="@{/app/{tenantId}/contacts/{contactId}/emails(tenantId=${tenant.id}, contactId=${contact.id})}"
+               th:hx-get="@{/app/{tenantId}/contacts2/{contactId}/emails(tenantId=${tenant.id}, contactId=${contact.id})}"
                hx-target="#emails"
                hx-swap="outerHTML"
                hx-trigger="click"

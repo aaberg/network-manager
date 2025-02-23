@@ -4,14 +4,11 @@ import kotlinx.datetime.Clock
 import net.aabergs.networkmanager.bl.AccountManager
 import net.aabergs.networkmanager.bl.AggregateManager
 import net.aabergs.networkmanager.bl.contact.ContactAggregate
-import net.aabergs.networkmanager.bl.contact.Email
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.view.RedirectView
 import java.security.Principal

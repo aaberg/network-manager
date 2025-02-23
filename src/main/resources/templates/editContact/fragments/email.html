@@ -29,7 +29,7 @@
                 </div>
                 <div class="clean-list-controls">
                     <a href="#"
-                       th:hx-get="@{/app/{tenantId}/contacts/{contactId}/update-email/{emailId}(tenantId=${tenant.id}, contactId=${contact.id}, emailId=${email.id})}"
+                       th:hx-get="@{/app/{tenantId}/contacts2/{contactId}/update-email/{emailId}(tenantId=${tenant.id}, contactId=${contact.id}, emailId=${email.id})}"
                        th:hx-target="${'#email-' + email.id}"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
@@ -47,7 +47,7 @@
         <div class="contact-region-divider"></div>
         <div id="addEmail">
             <a class="contact-region-section" href="#"
-               th:hx-get="@{/app/{tenantId}/contacts/{contactId}/add-email(tenantId=${tenant.id}, contactId=${contact.id})}"
+               th:hx-get="@{/app/{tenantId}/contacts2/{contactId}/add-email(tenantId=${tenant.id}, contactId=${contact.id})}"
                hx-target="#addEmail"
                hx-swap="innerHtml"
             >

@@ -7,3 +7,11 @@ services:
       POSTGRES_PASSWORD: thepassword
     ports:
       - "5432:5432"
+
+  otel-lgtm:
+    image: grafana/otel-lgtm:latest
+    container_name: otel-lgtm
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+      - "4318:4318"

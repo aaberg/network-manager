@@ -13,7 +13,7 @@
     </div>
     <ul class="clean-list">
         <li th:each="contact: ${contacts}">
-            <a th:href="@{/app/{tenantId}/contacts/{contactId}(tenantId=${tenant.id}, contactId=${contact.contactAggregateId})}">
+            <a th:href="@{/app/{tenantId}/contacts2/{contactId}(tenantId=${tenant.id}, contactId=${contact.contactAggregateId})}">
                 <span th:text="${contact.name}" th:style="|view-transition-name: cid-${contact.contactAggregateId}|"></span>
             </a>
         </li>
