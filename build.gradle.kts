@@ -20,11 +20,11 @@ repositories {
 	mavenCentral()
 }
 
-dependencyManagement {
-	imports {
-		mavenBom("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom:2.13.1")
-	}
-}
+//dependencyManagement {
+//	imports {
+//		mavenBom("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom:2.13.1")
+//	}
+//}
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
@@ -35,7 +35,7 @@ dependencies {
 	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
 
 	// <otel>
-	implementation("io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter")
+	//implementation("io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter")
 	// </otel>
 
 	//implementation("io.github.wimdeblauwe:htmx-spring-boot-thymeleaf:3.6.0")
@@ -51,7 +51,7 @@ dependencies {
 	runtimeOnly(libs.hikaricp)
 
 
-//	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

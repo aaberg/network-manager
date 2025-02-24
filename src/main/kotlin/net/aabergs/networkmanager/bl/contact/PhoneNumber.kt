@@ -7,4 +7,4 @@ import java.util.UUID
 @Serializable
 data class PhoneNumber(
     @Serializable(with = UUIDSerializer::class) val id: UUID,
-    val email: String)
+    val number: String)

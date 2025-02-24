@@ -3,6 +3,8 @@ package net.aabergs.networkmanager.web.app
 import net.aabergs.networkmanager.bl.AccountManager
 import net.aabergs.networkmanager.bl.AggregateManager
 import net.aabergs.networkmanager.bl.contact.ContactAggregate
+import net.aabergs.networkmanager.bl.extensions.primaryOrFirstEmail
+import net.aabergs.networkmanager.bl.extensions.primaryOrFirstPhoneNumber
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -30,6 +32,11 @@ class ContactWeb(
 
         model.addAttribute("tenant", tenant)
         model.addAttribute("contact", contact)
+
+        model.addAttribute("hasEmails", contact.emails.isNotEmpty())
+        model.addAttribute("primaryEmail", contact.primaryOrFirstEmail())
+        model.addAttribute("hasPhones", contact.phoneNumbers.isNotEmpty())
+        model.addAttribute("primaryPhone", contact.primaryOrFirstPhoneNumber())
 
         return "contact/contactView"
     }

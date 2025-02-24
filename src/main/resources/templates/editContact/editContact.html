@@ -8,7 +8,7 @@
     <div th:replace="~{fragments/main.html :: menu-overlay}"></div>
     <div th:replace="~{fragments/main.html :: menu (tenant=${tenant.id}, activeMenu='contacts')}"></div>
     <div id="edit-contact-container">
-        <div th:replace="~{fragments/main.html :: menu-bar(tenant=${tenant.id}, text='Edit contact', hideSearch=true, hideCreate=true)}"></div>
+        <div th:replace="~{fragments/main.html :: menu-bar(tenant=${tenant.id}, text='Edit contact 2', hideSearch=true, hideCreate=true)}"></div>
 
         <h1 class="ac pt1">
             <span th:text="${contact.name}" th:style="|view-transition-name: cid-${contact.id}|"></span>

@@ -10,6 +10,7 @@
     <script src="/webjars/htmx.org/dist/htmx.min.js"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/css/app.css}">
     <script type="text/javascript" src="/js/main.js"></script>
+    <script type="text/javascript" src="http://localhost:35729/livereload.js"></script>
 </head>
 <body>
 
@@ -29,7 +30,7 @@
         <rect y="18" width="24" height="2" fill="currentColor"/>
     </svg>
 
-    <h2 th:text="${text}"></h2>
+    <h2 th:text="${text}" th:style="${vtn == null ? '' : 'view-transition-name:' + vtn}"></h2>
 
     <div>
         <th:block th:unless="${hideCreate}" hx-boost="true">

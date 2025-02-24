@@ -4,16 +4,39 @@
     <title></title>
 </head>
 <body>
+<div class="main-container">
     <div th:replace="~{fragments/main.html :: menu-overlay}"></div>
     <div th:replace="~{fragments/main.html :: menu (tenant=${tenant.id}, activeMenu='contacts')}"></div>
 
-    <div id="contact-container">
-        <div th:replace="~{fragments/main.html :: menu-bar(tenant=${tenant.id}, text=${contact.name}, hideSearch=true, hideCreate=true)}"></div>
+    <div id="contacts-container">
+        <div th:replace="~{fragments/main.html :: menu-bar(tenant=${tenant.id}, text=${contact.name}, hideSearch=true, hideCreate=true, vtn=${'cid-' + contact.id})}"></div>
 
-        <h1 class="ac pt1">
-            <span th:text="${contact.name}" th:style="|view-transition-name: cid-${contact.id}|"></span>
-        </h1>
-        <div th:replace="~{editContact/fragments/email.html :: edit-email(contact=${contact}, tenant=${tenant})}"></div>
+        <div class="p1">
+            <ul class="clean-list with-orange-border">
+                <li>
+                    <div class="lc">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" style="fill: var(--orange-background-color)">
+                            <path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                        <a th:text="${primaryEmail}" th:href="${hasEmails ? 'mailto:' + primaryEmail : '#'}"></a>
+                    </div>
+                </li>
+                <li>
+                    <div class="lc">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" style="fill: var(--orange-background-color)">
+                            <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27c1.12.45 2.33.7 3.58.7a1 1 0 011 1v3.5a1 1 0 01-1 1C10.29 22 2 13.71 2 3.5a1 1 0 011-1H6.5a1 1 0 011 1c0 1.25.25 2.46.7 3.58a1 1 0 01-.27 1.11l-2.2 2.2z"/>
+                        </svg>
+                        <span th:text="${primaryPhone}"></span>
+                    </div>
+                </li>
+                <li>
+                    <div class="rc">
+                        <a href="#">edit</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </div>
+</div>
 </body>
 </html>

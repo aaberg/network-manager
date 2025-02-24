@@ -207,15 +207,33 @@ div.form-control {
 
 /*
 
-/** Content **/
+/** All center **/
 .ac{
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+/* Left Center */
+.lc {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+/* Right Center */
+.rc {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+
 .pt1 {
     padding-top: 1rem;
+}
+
+.p1 {
+    padding: 1rem;
 }
 
 .mr-2 {
